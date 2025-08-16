@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访客审核通过页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+            color: #333;
+	    font-weight: bold;
+        }
+        .header {
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .status {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .info-container {
+            margin-bottom: 30px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-label {
+            width: 120px;
+            font-weight: bold;
+        }
+        .info-value {
+            flex: 1;
+        }
+        .campus-options {
+            display: flex;
+            gap: 15px;
+        }
+        .selected-campus {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>当前时间：       <span id="current-time"></span></div>
+        <div>申请有效时间： <span id="valid-time"></span></div>
+    </div>
+    
+    <!-- 这里可以放置您的截图内容 -->
+    <img src="static-screenshot.png" alt="静态内容截图" style="width: 100%;">
+    
+    <div class="info-container">
+        <div class="info-row">
+            <div class="info-label">来访人</div>
+            <div class="info-value">潘玺彤</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">来访开始时间</div>
+            <div class="info-value">2025-08-15</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">访问结束时间</div>
+            <div class="info-value">2025-08-30</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">事由</div>
+            <div class="info-value">考研</div>
+        </div>
+           <div class="info-row">
+              <div class="info-label">出入校区</div>
+        </div>
+    
+    <!-- 这里可以放置您的截图内容 -->
+    <img src="enter.png" alt="静态内容截图" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">被访人</div>
+            <div class="info-value">葛世荣</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">被访人部门</div>
+            <div class="info-value">校领导</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">车牌</div>
+            <div class="info-value">无开车</div>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>身份证/护照</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 表格内容可以根据需要动态添加 -->
+        </tbody>
+    </table>
+
+    <script>
+        // 更新当前时间
+        function updateCurrentTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                weekday: 'long',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false
+            };
+            document.getElementById('current-time').textContent = now.toLocaleString('zh-CN', options);
+        }
+        
+        // 计算并更新有效时间
+        function updateValidTime() {
+            const startTime = new Date(2025, 7, 15); // 2025年6月22日 (月份是0-based)
+            const endTime = new Date(2025, 7, 30); // 2025年6月28日
+            const now = new Date();
+            
+            // 计算剩余时间
+            let remainingMs = endTime - now;
+            
+            if (remainingMs <= 0) {
+                document.getElementById('valid-time').textContent = "已过期";
+                return;
+            }
+            
+            // 计算天数、小时、分钟、秒
+            const days = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
+            remainingMs %= (1000 * 60 * 60 * 24);
+            const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+            remainingMs %= (1000 * 60 * 60);
+            const minutes = Math.floor(remainingMs / (1000 * 60));
+            remainingMs %= (1000 * 60);
+            const seconds = Math.floor(remainingMs / 1000);
+            
+            document.getElementById('valid-time').textContent = 
+                `${days}天${hours}时${minutes}分${seconds}秒`;
+        }
+        
+        // 初始化并每秒更新
+        updateCurrentTime();
+        updateValidTime();
+        setInterval(() => {
+            updateCurrentTime();
+            updateValidTime();
+        }, 1000);
+    </script>
+</body>
+</html>
